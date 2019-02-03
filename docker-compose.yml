@@ -1,0 +1,29 @@
+version: '3'
+networks:
+  internal-network:
+    driver: bridge
+
+services:
+
+  #MongoDB
+  mongo:
+    image: mongo
+    ports:
+    - "27018:27017"
+    volumes:
+    - ~/file-service/database:/data/db
+
+  #Application Server
+  server:
+    build: .
+    environment:
+      APIKEY: mykey
+    ports:
+    - "8082:5050"
+    - "3001:3001"
+    - "9090:9090"
+    depends_on:
+    - mongo
+    volumes:
+    - ~/file-service/filesystem:/data/filesystem/images
+

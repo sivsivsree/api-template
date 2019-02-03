@@ -1,0 +1,15 @@
+{
+  "database": {
+    "connectionURL": "mongodb://localhost:27017/dafza"
+  },
+  "server": {
+    "PORT": 5051,
+    "HOST": "http://localhost",
+    "URL": "http://localhost:5051"
+  },
+
+  "jwt": {
+    "secret": "MYJWTSECRET",
+    "expiresIn": 86400
+  }
+}
