@@ -10,6 +10,8 @@ const config = require('config');
 const Error = require('./exceptions/errors');
 const httpStatusCodes = require("http-status-codes");
 
+const logger = require('./helpers/logger');
+
 
 const mongoDB = require('./database/enableMongo');
 
@@ -46,8 +48,8 @@ app.use(bodyParser.urlencoded({
 }));
 
 // Logging for development
-app.use(morgan('dev'));
-
+//app.use(morgan('dev',));
+app.use(morgan(':method :url :response-time', {stream: logger.stream}));
 
 // model registration for mongo
 require("./database/registerModels");
@@ -71,20 +73,21 @@ app.use((err, req, res, next) => {
 });
 
 
-
 // 404 custom errors
 app.use((req, res) => {
-    Error.res(res, new  Error.NotFoundError(req.originalUrl + ' not Found'));
+    Error.res(res, new Error.NotFoundError(req.originalUrl + ' not Found'));
 });
 
 
 // starting the Database and Server
 mongoDB.connectMongo(() => {
-    app.listen(PORT).on('error', console.log);
+    app.listen(PORT).on('error', (error) => {
+        logger.error(`[Start Server]:  ${error}`);
+    });
+    logger.debug(`[Start Server]: Started on port ${PORT}`);
 });
 
 
 process.on('unhandledRejection', (reason, p) => {
-    console.log("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason.msg);
-
+    logger.info("Possibly Unhandled Rejection at: Promise ", p, " reason: ", reason.msg);
 });
