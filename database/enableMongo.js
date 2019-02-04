@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 const Promise = require('bluebird');
 const config = require('config');
 
+const logger = require('../helpers/logger');
 
-const loggerName = '[enableMongo]:';
+const loggerName = '[enableMongo]: ';
 
 const mongoConnection = config.database.connectionURL;
 
@@ -14,7 +15,7 @@ exports.connectMongo = function (cb = null) {
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error: '));
     db.once('open', function () {
-        console.log(loggerName, 'Connection with MongoDB installed');
+        logger.info(loggerName + 'Connection to mongodb established!!!!');
         if (cb != null) {
             cb();
         }

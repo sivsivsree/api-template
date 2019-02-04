@@ -7,7 +7,6 @@ const fetch = (req, res) => {
     const filePath = UPLOAD_DIR + '/' + imageId;
     console.log("Over here", filePath);
     if (fs.existsSync(filePath)) {
-
         res.sendFile(filePath);
     } else {
         console.log("Error Over here");

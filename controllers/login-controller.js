@@ -2,40 +2,35 @@
 
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const auth = mongoose.model('users');
 const config = require('config');
 const jwt = require('jsonwebtoken');
+const logger = require('../helpers/logger');
+
+const loginModel = require('../models/login-modal');
 
 const Error = require("../exceptions/errors");
 const ValidateError = Error.ValidateError;
 
-const LoginError =  Error.LoginError;
+const LoginError = Error.LoginError;
 
 
 const login = async (req, res) => {
-    console.log('[login]', req.body);
+    const methodName = "[login] : ";
+    logger.info(methodName + JSON.stringify(req.body));
 
     try {
-        if (!req.body.username || !req.body.password) {
-            throw "Username Password Incorrect.";
-        }
-
-
-        let user = await auth.findOne({username: req.body.username, password: req.body.password});
+        let user = await loginModel.findUserWithCredentials(req.body.username, req.body.password);
 
         if (user) {
-
+            console.log(user);
             let token = jwt.sign({id: user._id, role: user.role}, config.jwt.secret, {
                 expiresIn: config.jwt.expiresIn
             });
-
             res.json({success: true, token: token, role: user.role});
 
         } else {
             throw "No users";
         }
-
     } catch (e) {
         Error.res(res, new LoginError(e));
     }
@@ -43,21 +38,17 @@ const login = async (req, res) => {
 };
 
 const verify = async (req, res) => {
-    console.log('[verify]', req.body);
+    const methodName = "[verify] : ";
+    logger.info(methodName + req.body);
 
     try {
-        if (req.body.decoded._id) {
-
-            let user = await auth.findOne({_id: req.body.decoded._id});
-            if (user._id) {
-                res.json({success: true, verified: true});
-            } else {
-                throw "No users";
-            }
-
+        let user = await loginModel.findOneId(req.body.decoded._id);
+        if (user._id) {
+            res.json({success: true, verified: true});
         } else {
-            throw "Incorrect.";
+            throw "No users";
         }
+
     } catch (e) {
         Error.res(res, new LoginError(e));
     }

@@ -30,7 +30,7 @@ const validateServiceValidateRequest = (input, cb) => {
         }
     } catch (e) {
         let err = new ValidateError(e.message);
-        return cb(err);
+        return cb(err.message);
 
     }
 
