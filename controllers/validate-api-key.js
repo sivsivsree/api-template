@@ -26,11 +26,11 @@ const validateServiceValidateRequest = (input, cb) => {
             let decoded = jwt.verify(token, config.jwt.secret);
             return cb(null, decoded);
         } else {
-            throw new ValidateError("API key not provided.");
+            throw "API key not provided.";
         }
     } catch (e) {
-        let err = new ValidateError(e.message);
-        return cb(err.message);
+        throw  new ValidateError(e);
+        //return;
 
     }
 

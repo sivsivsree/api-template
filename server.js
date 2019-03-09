@@ -66,8 +66,6 @@ routerReg(app);
 
 // Error Handling
 app.use((err, req, res, next) => {
-    // logger.log('error', err);
-    console.error("Error handler", err);
     Error.res(res, err);
 
 });
