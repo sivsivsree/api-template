@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha ./test/routes-test.js",
+    "test": "mocha ./test/",
     "start": "node server.js",
     "run": "docker-compose build && docker-compose up"
   },
