@@ -12,9 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "app-root-path": "^2.1.0",
-    "appmetrics": "^4.0.0",
-    "appmetrics-dash": "^4.0.0",
-    "appmetrics-prometheus": "^2.0.0",
     "bcrypt": "^3.0.3",
     "bluebird": "^3.5.2",
     "body-parser": "^1.18.3",
